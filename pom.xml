@@ -51,7 +51,7 @@
                             <target name="slice-for-java-and-csharp">
                                 <mkdir dir="${project.basedir}/src/main/dotnet/JavaInterop/generated"/>
                                 <exec executable="slice2cs" dir="${project.basedir}/src/main/dotnet/JavaInterop">
-                                    <arg line="--output-dir generated ..\..\..\resources\WiFiApi.ice"/>
+                                    <arg line="--output-dir generated ..\..\resources\WiFiApi.ice"/>
                                 </exec>
                                 <mkdir dir="${project.build.outputDirectory}"/>
                                 <taskdef name="slice2java" classname="Slice2JavaTask"
@@ -96,10 +96,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>2.4.1</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
-                        <id>clean-extra-dirs</id>
+                        <id>clean-generated-items</id>
                         <phase>clean</phase>
                         <goals>
                             <goal>clean</goal>
@@ -107,11 +107,46 @@
                         <configuration>
                             <filesets>
                                 <fileset>
+                                    <directory>${basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>*.dll</include>
+                                        <include>*.pdb</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
                                     <directory>${basedir}/src/main/dotnet/JavaInterop/generated</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
                                     <directory>${basedir}/src/main/dotnet/JavaInterop/bin</directory>
-                                    <directory>${basedir}/src/main/dotnet/JavaInterop/bin</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
+                                    <directory>${basedir}/src/main/dotnet/JavaInterop/obj</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
+                                    <directory>${basedir}/src/main/dotnet/SimpleWifi/bin</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
                                     <directory>${basedir}/src/main/dotnet/SimpleWifi/obj</directory>
-                                    <directory>${basedir}/src/main/dotnet/SimpleWifi/obj</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
                                 </fileset>
                             </filesets>
                         </configuration>
