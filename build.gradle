@@ -34,7 +34,7 @@ msbuild {
     // it support to search the msbuild tools from vswhere (by default it searches the latest)
 //    version = '15.0'
     // or define the exact msbuild dir explicity
-    msbuildDir = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin'
+//    msbuildDir = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin'
 
 
     // Below values can override settings from the project file
