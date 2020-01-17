@@ -1,11 +1,9 @@
 package io.github.incplusplus.simplewifijava;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-
 import WiFiApi.ApiHandlePrx;
 import io.github.incplusplus.bigtoolbox.io.filesys.TempFile;
+
+import java.io.IOException;
 
 public class ScratchPad {
 	private static Process dotNetApp;
