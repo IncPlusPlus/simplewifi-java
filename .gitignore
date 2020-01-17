@@ -22,7 +22,11 @@
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+# Maven
+**/target
+
 # Gradle
+.gradle
 .idea/**/gradle.xml
 .idea/**/libraries
 
