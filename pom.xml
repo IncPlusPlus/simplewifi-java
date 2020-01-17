@@ -8,9 +8,129 @@
     <artifactId>simplewifi-java</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>SimpleWifi: Java Edition </name>
+    <name>SimpleWifi: Java Edition</name>
     <description>A Java-wrapped version of SimpleWifi</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <bintray.repo>incplusplus/main-maven</bintray.repo>
+        <bintray.package>simplewifi-java</bintray.package>
+        <bintray.subject>incplusplus</bintray.subject>
+    </properties>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.exe</include>
+                    <include>**/*.dll</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target name="slice-for-java-and-csharp">
+                                <mkdir dir="${project.basedir}/src/main/dotnet/JavaInterop/generated"/>
+                                <exec executable="slice2cs" dir="${project.basedir}/src/main/dotnet/JavaInterop">
+                                    <arg line="--output-dir generated ..\..\..\resources\WiFiApi.ice"/>
+                                </exec>
+                                <mkdir dir="${project.build.outputDirectory}"/>
+                                <taskdef name="slice2java" classname="Slice2JavaTask"
+                                         classpathref="maven.plugin.classpath"/>
+                                <slice2java outputdir="${project.build.outputDirectory}">
+                                    <fileset dir="${basedir}/src/main/resources" includes="*.ice"/>
+                                </slice2java>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.zeroc</groupId>
+                        <artifactId>ant-ice</artifactId>
+                        <version>4.1.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.outputDirectory}/WiFiApi</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <url>https://github.com/IncPlusPlus/simplewifi-java</url>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License, Version 3</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+            <distribution>repo</distribution>
+            <!-- https://maven.apache.org/pom.html#Licenses -->
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Ryan Cloherty</name>
+            <email>cloherty.ryan@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/IncPlusPlus/simplewifi-java.git</connection>
+        <developerConnection>scm:git:https://github.com/IncPlusPlus/simplewifi-java.git</developerConnection>
+        <url>https://github.com/IncPlusPlus/simplewifi-java</url>
+    </scm>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-incplusplus-main-maven</id>
+            <name>bintray</name>
+            <url>https://dl.bintray.com/incplusplus/main-maven</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>gradle-releases</id>
+            <name>Gradle Releases</name>
+            <url>https://repo.gradle.org/gradle/libs-releases-local/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencies>
         <dependency>
