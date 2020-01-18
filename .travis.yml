@@ -10,6 +10,8 @@ matrix:
   - jdk: oraclejdk11
     # See https://github.com/travis-ci/travis-ci/issues/8667
     install: true
+    before_script:
+      - choco install maven --no-progress -y
     script:
     - mvn clean install
 deploy:
