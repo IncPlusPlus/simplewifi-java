@@ -1,10 +1,22 @@
-os: windows
-language: cpp
+dist: xenial
+language: java
 cache:
   directories:
-  - "$HOME/AppData/Local/Temp/chocolatey"
+    - "$HOME/.m2/repository"
 env:
-- CLI_VERSION=latest
+  - CLI_VERSION=latest
+addons:
+  apt:
+    sources:
+      - sourceline: deb https://download.mono-project.com/repo/ubuntu stable-xenial
+          main
+        key_url: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA6A19B38D3D831EF
+    packages:
+      - mono-devel
+      - msbuild
+      - libmono-system-runtime-interopservices-runtimeinformation4.0-cil
+      - slice2java
+      - slice2cs
 matrix:
   include:
   - jdk: oraclejdk11
