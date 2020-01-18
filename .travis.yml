@@ -12,7 +12,7 @@ matrix:
     install: true
     before_script:
       - choco install openjdk maven --no-progress -y
-      - cmd /c refreshenv
+      - cmd.exe //c "RefreshEnv.cmd & mvn clean install"
     script:
     - mvn clean install
 deploy:
