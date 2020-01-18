@@ -12,6 +12,9 @@ matrix:
     install: true
     before_script:
       - choco install openjdk11 maven --no-progress -y
+      - curl -so Ice.msi https://download.zeroc.com/ice/3.7/Ice-3.7.3.msi
+      - Ice.msi /qn /l log.txt
+      - type log.txt
       - cmd.exe //c "RefreshEnv.cmd & mvn clean install"
     script:
     - mvn clean install
