@@ -13,7 +13,7 @@ addons:
         key_url: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA6A19B38D3D831EF
     packages:
       - mono-devel
-      - msbuild
+#      - msbuild
       - libmono-system-runtime-interopservices-runtimeinformation4.0-cil
       - slice2java
       - slice2cs
