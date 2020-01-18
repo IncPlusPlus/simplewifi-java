@@ -11,7 +11,7 @@ matrix:
     # See https://github.com/travis-ci/travis-ci/issues/8667
     install: true
     before_script:
-      - choco install openjdk maven --no-progress -y
+      - choco install openjdk11 maven --no-progress -y
       - cmd.exe //c "RefreshEnv.cmd & mvn clean install"
     script:
     - mvn clean install
