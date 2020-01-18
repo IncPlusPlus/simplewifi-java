@@ -19,7 +19,7 @@ addons:
     packages:
       - mono-devel
       - msbuild
-      - libmono-system-runtime-interopservices-runtimeinformation4.0-cil
+#      - libmono-system-runtime-interopservices-runtimeinformation4.0-cil
       - zeroc-ice-compilers
 matrix:
   include:
