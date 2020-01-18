@@ -1,4 +1,4 @@
-dist: bionic
+dist: xenial
 language: java
 cache:
   directories:
@@ -8,8 +8,8 @@ env:
 
 before_install:
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv B6391CB2CFBA643D
-  - sudo apt-add-repository "deb http://zeroc.com/download/ice/3.7/ubuntu18.04 stable main"
-  - sudo apt update
+  - sudo apt-add-repository "deb http://zeroc.com/download/ice/3.7/ubuntu16.04 stable main"
+  - sudo apt-get update
 addons:
   apt:
     sources:
