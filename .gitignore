@@ -46,6 +46,7 @@
 src/main/resources/*.pdb
 src/main/resources/*.dll
 src/main/resources/*.exe
+src/main/resources/*.exe.config
 
 ### VisualStudio template
 ## Ignore Visual Studio temporary files, build results, and

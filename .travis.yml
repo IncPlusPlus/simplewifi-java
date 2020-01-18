@@ -2,26 +2,33 @@ os: windows
 language: cpp
 cache:
   directories:
-    - $HOME/AppData/Local/Temp/chocolatey
+  - "$HOME/AppData/Local/Temp/chocolatey"
 env:
-  - CLI_VERSION=latest
-before_script:
-  - choco install maven -y --no-progress
+- CLI_VERSION=latest
 matrix:
   include:
-    - jdk: oraclejdk11
-      # See https://github.com/travis-ci/travis-ci/issues/8667
-      install: true
-      script:
-        - mvn clean jacoco:prepare-agent install jacoco:report
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-#      deploy:
-#        - provider: bintray
-#          file: bintray_info_maven.JSON
-#          user: incplusplus
-#          key: "$bintray_key"
-#          skip_cleanup: true
-#          on:
-#            repo: IncPlusPlus/bigtoolbox-network
-#            branch: master
+  - jdk: oraclejdk11
+    # See https://github.com/travis-ci/travis-ci/issues/8667
+    install: true
+    script:
+    - mvn clean install
+deploy:
+  - provider: bintray
+    file: bintray_info_maven.JSON
+    user: incplusplus
+    key: "$bintray_key"
+    skip_cleanup: true
+    on:
+      repo: IncPlusPlus/simplewifi-java
+      branch: master
+  - provider: releases
+    api_key:
+      secure: CPWP4tohJD0XxCrdLmT3iIdAeY2iC141aemliaGx7D7a1rBip278vP1ZP8gLN39VTYZQheoUdo+0b7ErQZCaL4rLY6hGZgrroCR1DP32WT21dGf/2OjaF1pNT3Put/yQIAC9TUf8KtPlZMr1qMQUK8cBWcRcQJAhNIJ9ndWTqPeTGDNSXpk6yJIn9CQOVxASEbk1vycSwNJJns+tCxct2jDQ+B+nJtV5uyvYxvpODetk1rMZoSTZyU9pL2Eh0kgpL/ZuexfRzAilaeFXEfGYKo1D5extTXSiDgNnwuboIIDk3dzQu5PiC51XFMAuGQqjHZnQxokPJZe/S/H4xYKTYDa3LdK7h6QOZY5gD1Mh3AXyWbqt4+WnpyyFIH02G0BHCAiFhKl1RqSFzg/z1TctaFvtJkdjrHOQAJRn6cl6DUwZYzIJUb4zKJFEMbCc6n6R/iFlnwf85YZeMslS3aWIDbXBy5ZaKxh0K8a5LJQTXrVO1hNaJkKDRpg4cegclAU+RukrCrdxdHEk1YoH4GN3IDcxbFX7t/AdjSlZyUR7R3gNils+1pa1zz6jjOgdFUrqCz5Yq1Dt/V2eqky5pRIW9HRD51ILurMwrXc8DN2UfSIeT2NbIc3aTi5P3ZTR976RLevk2g7sSEQHCAtrAx0JhLdu/nge7Qp+8Xr0B02XQeM=
+    file_glob: true
+    file: target/simplewifi-java-*.*.*.jar
+    skip_cleanup: true
+    prerelease: true
+    on:
+      repo: IncPlusPlus/simplewifi-java
+      branch: master
+      tags: true
