@@ -5,6 +5,8 @@ cache:
     - $HOME/AppData/Local/Temp/chocolatey
 env:
   - CLI_VERSION=latest
+before_script:
+  - choco install maven -y --no-progress
 matrix:
   include:
     - jdk: oraclejdk11
