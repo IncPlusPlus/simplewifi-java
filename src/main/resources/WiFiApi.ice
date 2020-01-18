@@ -4,4 +4,4 @@ module WiFiApi
     {
         void disconnectAll();
     }
-}
+};
