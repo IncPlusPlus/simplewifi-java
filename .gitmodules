@@ -1,0 +1,3 @@
+[submodule "src/main/dotnet/SimpleWifi"]
+	path = src/main/dotnet/SimpleWifi
+	url = https://github.com/IncPlusPlus/simplewifi
