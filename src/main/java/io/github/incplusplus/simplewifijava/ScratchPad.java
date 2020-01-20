@@ -19,7 +19,7 @@ public class ScratchPad {
 			System.out.println("Disconnecting");
 			wifi.disconnectAll();
 			System.out.println("Disconnected");
-			//todo: Make sure that JavaInterop gets STOPPED
+			wifi.terminateApi();
 		}
 	}
 }

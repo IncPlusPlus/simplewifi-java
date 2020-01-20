@@ -14,7 +14,7 @@ namespace JavaInterop
                 {
                     var wifiApiAdapter =
                         communicator.createObjectAdapterWithEndpoints("SimpleWiFiAdapter", "default -h localhost -p 10001");
-                    wifiApiAdapter.add(new WiFiApiI(), Ice.Util.stringToIdentity("SimpleWiFi"));
+                    wifiApiAdapter.add(new WiFiApiI(communicator), Ice.Util.stringToIdentity("SimpleWiFi"));
                     wifiApiAdapter.activate();
                     communicator.waitForShutdown();
                 }
@@ -30,9 +30,21 @@ namespace JavaInterop
     public class WiFiApiI : WiFiApi.ApiHandleDisp_
     {
         private Wifi wifi = new Wifi();
+        private Communicator communicator;
+
+        public WiFiApiI(Communicator communicator)
+        {
+            this.communicator = communicator;
+        }
+
         public override void disconnectAll(Current current = null)
         {
             wifi.Disconnect();
+        }
+
+        public override void terminateApi(Current current = null)
+        {
+            communicator.shutdown();
         }
     }
 }
