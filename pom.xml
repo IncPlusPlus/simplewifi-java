@@ -87,7 +87,7 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${project.build.outputDirectory}/WiFiApi</source>
+                                <source>${basedir}/target/generated-sources</source>
                             </sources>
                         </configuration>
                     </execution>
