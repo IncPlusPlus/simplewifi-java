@@ -1,6 +1,9 @@
 ﻿using Ice;
 using System;
 using SimpleWifi;
+using SimpleWifi.Win32.Interop;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace JavaInterop
 {
@@ -45,6 +48,25 @@ namespace JavaInterop
         public override void terminateApi(Current current = null)
         {
             communicator.shutdown();
+        }
+
+        private void ListAPsDetail()
+        {
+            var accessPoints = List();
+            JAccessPointPack pack = new JAccessPointPack();
+
+            foreach (AccessPoint accessPoint in accessPoints)
+            {
+                pack.Add(new JAccessPoint(accessPoint));
+            }
+            Console.WriteLine(JsonConvert.SerializeObject(pack));
+
+        }
+
+        private IEnumerable<AccessPoint> List()
+        {
+            IEnumerable<AccessPoint> accessPoints = wifi.GetAccessPoints().OrderByDescending(ap => ap.SignalStrength);
+            return accessPoints;
         }
     }
 }
