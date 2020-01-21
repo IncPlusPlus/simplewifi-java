@@ -1,12 +1,7 @@
+["java:package:generated"]
 module WiFiApi
 {
-    interface ApiHandle
-    {
-        void disconnectAll();
-        void terminateApi();
-    };
-
-    class JAccessPoint
+    struct JAccessPoint
     {
         string InterfaceName;
         string name;
@@ -16,5 +11,14 @@ module WiFiApi
         string AuthAlgorithm;
         string CipherAlgorithm;
         string BssType;
+    };
+
+    sequence<JAccessPoint> JAccessPointSeq;
+
+    interface ApiHandle
+    {
+        void disconnectAll();
+        void terminateApi();
+        JAccessPointSeq ListAPsDetail();
     };
 };

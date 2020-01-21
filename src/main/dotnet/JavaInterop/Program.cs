@@ -1,9 +1,11 @@
 ﻿using Ice;
 using System;
 using SimpleWifi;
-using SimpleWifi.Win32.Interop;
 using System.Collections.Generic;
 using System.Linq;
+using SimpleWifi.Win32;
+using SimpleWifi.Win32.Interop;
+using System.Reflection;
 
 namespace JavaInterop
 {
@@ -45,28 +47,58 @@ namespace JavaInterop
             wifi.Disconnect();
         }
 
+        public override WiFiApi.JAccessPoint[] ListAPsDetail(Current current = null)
+        {
+            var accessPoints = List();
+            WiFiApi.JAccessPoint[] APList = new WiFiApi.JAccessPoint[accessPoints.Count()];
+
+            for (int i = 0; i < APList.Length; i++)
+            {
+                APList[i] = new JavaInterop.WiFiApiI.JAccessPoint(accessPoints.ElementAt(i));
+            }
+            return APList;
+        }
+
         public override void terminateApi(Current current = null)
         {
             communicator.shutdown();
-        }
-
-        private void ListAPsDetail()
-        {
-            var accessPoints = List();
-            JAccessPointPack pack = new JAccessPointPack();
-
-            foreach (AccessPoint accessPoint in accessPoints)
-            {
-                pack.Add(new JAccessPoint(accessPoint));
-            }
-            Console.WriteLine(JsonConvert.SerializeObject(pack));
-
+            //Environment.Exit(0);
         }
 
         private IEnumerable<AccessPoint> List()
         {
             IEnumerable<AccessPoint> accessPoints = wifi.GetAccessPoints().OrderByDescending(ap => ap.SignalStrength);
             return accessPoints;
+        }
+
+        public class JAccessPoint : WiFiApi.JAccessPoint
+        {
+            internal JAccessPoint(AccessPoint thisAP)
+            {
+                WlanInterface wlanInterface = thisAP.GetFieldValue<WlanInterface>("_interface");
+                WlanAvailableNetwork network = thisAP.GetFieldValue<WlanAvailableNetwork>("_network");
+                InterfaceName = wlanInterface.InterfaceName;
+                name = thisAP.Name;
+                signalStrength = (int)thisAP.SignalStrength;
+                AuthAlgorithm = Enum.GetName(typeof(Dot11AuthAlgorithm), network.dot11DefaultAuthAlgorithm);
+                CipherAlgorithm = Enum.GetName(typeof(Dot11CipherAlgorithm), network.dot11DefaultCipherAlgorithm);
+                BssType = Enum.GetName(typeof(Dot11BssType), network.dot11BssType);
+                connectable = network.networkConnectable;
+                wlanNotConnectableReason = Enum.GetName(typeof(WlanReasonCode), network.wlanNotConnectableReason);
+
+            }
+        }
+    }
+
+    //See https://stackoverflow.com/a/46488844/1687436
+    public static class ReflectionExtensions
+    {
+        public static T GetFieldValue<T>(this object obj, string name)
+        {
+            // Set the flags so that private and public fields from instances will be found
+            var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            var field = obj.GetType().GetField(name, bindingFlags);
+            return (T)field?.GetValue(obj);
         }
     }
 }
