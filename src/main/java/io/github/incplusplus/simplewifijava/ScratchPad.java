@@ -4,11 +4,12 @@ import WiFiApi.ApiHandlePrx;
 import io.github.incplusplus.bigtoolbox.io.filesys.TempFile;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class ScratchPad {
 	private static Process dotNetApp;
 	private static TempFile interopExe;
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, URISyntaxException {
 		interopExe = new TempFile("JavaInterop", "exe");
 		dotNetApp = Runtime.getRuntime().exec(interopExe.getAsFile().getPath());
 		try(com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args))
@@ -18,6 +19,7 @@ public class ScratchPad {
 			System.out.println("Disconnecting");
 			wifi.disconnectAll();
 			System.out.println("Disconnected");
+			wifi.terminateApi();
 		}
 	}
 }

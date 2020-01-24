@@ -6,7 +6,7 @@
 
     <groupId>io.github.incplusplus</groupId>
     <artifactId>simplewifi-java</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
     <name>SimpleWifi: Java Edition</name>
     <description>A Java-wrapped version of SimpleWifi</description>
@@ -21,6 +21,13 @@
         <bintray.package>simplewifi-java</bintray.package>
         <bintray.subject>incplusplus</bintray.subject>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>main-maven</id>
+            <url>https://api.bintray.com/maven/${bintray.subject}/${bintray.repo}/${bintray.package}/;publish=1</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
@@ -44,7 +51,7 @@
                             <target name="slice-for-java-and-csharp">
                                 <mkdir dir="${project.basedir}/src/main/dotnet/JavaInterop/generated"/>
                                 <exec executable="slice2cs" dir="${project.basedir}/src/main/dotnet/JavaInterop">
-                                    <arg line="--output-dir generated ..\..\..\resources\WiFiApi.ice"/>
+                                    <arg line="--output-dir generated ..\..\resources\WiFiApi.ice"/>
                                 </exec>
                                 <mkdir dir="${project.build.outputDirectory}"/>
                                 <taskdef name="slice2java" classname="Slice2JavaTask"
@@ -86,8 +93,195 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-resource-one</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <phase>install</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${settings.localRepository}/io/github/incplusplus/${project.artifactId}/${project.version}</directory>
+                                    <includes>
+                                        <include>*.pom</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.0</version>
+                <!-- workaround for https://bugs.openjdk.java.net/browse/JDK-8212233 -->
+                <!--                <configuration>-->
+                <!--                    <source>8</source>-->
+                <!--                </configuration>-->
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <quiet>true</quiet>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>resource-bundles</id>
+                        <goals>
+                            <!-- produce source artifact for main project sources -->
+                            <goal>resource-bundle</goal>
+                            <!-- produce source artifact for project test sources -->
+                            <!--                            <goal>test-resource-bundle</goal>-->
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <detectOfflineLinks>false</detectOfflineLinks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>clean-generated-items</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>*.dll</include>
+                                        <include>*.pdb</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
+                                    <directory>${basedir}/src/main/dotnet/JavaInterop/generated</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
+                                    <directory>${basedir}/src/main/dotnet/JavaInterop/bin</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
+                                    <directory>${basedir}/src/main/dotnet/JavaInterop/obj</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
+                                    <directory>${basedir}/src/main/dotnet/SimpleWifi/bin</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
+                                    <directory>${basedir}/src/main/dotnet/SimpleWifi/obj</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>skip-msbuild-on-lgtm</id>
+            <activation>
+                <property>
+                    <name>!lgtm</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.fortasoft</groupId>
+                        <artifactId>gradle-maven-plugin</artifactId>
+                        <version>1.0.8</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.gradle</groupId>
+                                <artifactId>gradle-tooling-api</artifactId>
+                                <version>5.0</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>gradle-clean</id>
+                                <goals>
+                                    <goal>invoke</goal>
+                                </goals>
+                                <phase>clean</phase>
+                                <configuration>
+                                    <gradleVersion>5.3.1</gradleVersion>
+                                    <tasks>
+                                        <task>clean</task>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>gradle-clean-build</id>
+                                <goals>
+                                    <goal>invoke</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <gradleVersion>5.3.1</gradleVersion>
+                                    <tasks>
+                                        <task>clean</task>
+                                        <task>build</task>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <url>https://github.com/IncPlusPlus/simplewifi-java</url>
 
