@@ -405,3 +405,4 @@ MigrationBackup/
 
 
 src/main/dotnet/JavaInterop/generated/
+src/main/dotnet/.idea/
