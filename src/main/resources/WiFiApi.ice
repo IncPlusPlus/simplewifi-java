@@ -1,4 +1,4 @@
-["java:package:generated"]
+["java:package:io.github.incplusplus.simplewifijava.generated"]
 module WiFiApi
 {
     class JAccessPoint
