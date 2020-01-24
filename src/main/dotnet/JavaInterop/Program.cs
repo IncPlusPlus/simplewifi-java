@@ -6,6 +6,7 @@ using System.Linq;
 using SimpleWifi.Win32;
 using SimpleWifi.Win32.Interop;
 using System.Reflection;
+using WiFiApi;
 
 namespace JavaInterop
 {
@@ -77,12 +78,12 @@ namespace JavaInterop
             {
                 WlanInterface wlanInterface = thisAP.GetFieldValue<WlanInterface>("_interface");
                 WlanAvailableNetwork network = thisAP.GetFieldValue<WlanAvailableNetwork>("_network");
-                InterfaceName = wlanInterface.InterfaceName;
+                interfaceName = wlanInterface.InterfaceName;
                 name = thisAP.Name;
                 signalStrength = (int)thisAP.SignalStrength;
-                AuthAlgorithm = Enum.GetName(typeof(Dot11AuthAlgorithm), network.dot11DefaultAuthAlgorithm);
-                CipherAlgorithm = Enum.GetName(typeof(Dot11CipherAlgorithm), network.dot11DefaultCipherAlgorithm);
-                BssType = Enum.GetName(typeof(Dot11BssType), network.dot11BssType);
+                authAlgorithm = Enum.GetName(typeof(Dot11AuthAlgorithm), network.dot11DefaultAuthAlgorithm);
+                cipherAlgorithm = Enum.GetName(typeof(Dot11CipherAlgorithm), network.dot11DefaultCipherAlgorithm);
+                bssType = Enum.GetName(typeof(Dot11BssType), network.dot11BssType);
                 connectable = network.networkConnectable;
                 wlanNotConnectableReason = Enum.GetName(typeof(WlanReasonCode), network.wlanNotConnectableReason);
 

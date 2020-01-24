@@ -1,16 +1,16 @@
 ["java:package:generated"]
 module WiFiApi
 {
-    struct JAccessPoint
+    class JAccessPoint
     {
-        string InterfaceName;
-        string name;
-        int signalStrength;
-        bool connectable;
-        string wlanNotConnectableReason;
-        string AuthAlgorithm;
-        string CipherAlgorithm;
-        string BssType;
+        ["protected"] string name;
+        ["protected"] int signalStrength;
+        ["protected"] string interfaceName;
+        ["protected"] bool connectable;
+        ["protected"] string wlanNotConnectableReason;
+        ["protected"] string authAlgorithm;
+        ["protected"] string cipherAlgorithm;
+        ["protected"] string bssType;
     };
 
     sequence<JAccessPoint> JAccessPointSeq;
