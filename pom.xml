@@ -53,10 +53,10 @@
                                 <exec executable="slice2cs" dir="${project.basedir}/src/main/dotnet/JavaInterop">
                                     <arg line="--output-dir generated ..\..\resources\WiFiApi.ice"/>
                                 </exec>
-                                <mkdir dir="${project.build.outputDirectory}"/>
+                                <mkdir dir="${project.build.outputDirectory}/../generated-sources"/>
                                 <taskdef name="slice2java" classname="Slice2JavaTask"
                                          classpathref="maven.plugin.classpath"/>
-                                <slice2java outputdir="${project.build.outputDirectory}">
+                                <slice2java outputdir="${project.build.outputDirectory}/../generated-sources">
                                     <fileset dir="${basedir}/src/main/resources" includes="*.ice"/>
                                 </slice2java>
                             </target>
@@ -87,7 +87,7 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${project.build.outputDirectory}/WiFiApi</source>
+                                <source>${basedir}/target/generated-sources</source>
                             </sources>
                         </configuration>
                     </execution>
