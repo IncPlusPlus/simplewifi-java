@@ -1,22 +1,45 @@
 ["java:package:io.github.incplusplus.simplewifijava.generated"]
 module WiFiApi
 {
-    class JAccessPoint
+    struct AuthRequestStruct
     {
-        ["protected"] string name;
-        ["protected"] int signalStrength;
-        ["protected"] string interfaceName;
-        ["protected"] bool connectable;
-        ["protected"] string wlanNotConnectableReason;
-        ["protected"] string authAlgorithm;
-        ["protected"] string cipherAlgorithm;
-        ["protected"] string bssType;
+        string password;
+        string username;
+        string domain;
     };
 
-    sequence<JAccessPoint> JAccessPointSeq;
+    interface JAccessPoint
+    {
+        bool connect();
+        bool connectWithAuth(AuthRequestStruct authRequest);
+        string getName();
+        int getSignalStrength();
+        string getInterfaceName();
+        bool isConnectable();
+        string getWlanNotConnectableReason();
+        string getAuthAlgorithm();
+        string getCipherAlgorithm();
+        string getBssType();
+        string getProfileXML();
+    };
+
+    sequence<JAccessPoint*> JAccessPointSeq;
+
+    interface WlanInterface
+    {
+        void scan();
+    };
+
+    interface WlanInterfaceI
+    {
+        void connectOnInterface(WlanInterface* wint, JAccessPoint* accessPoint);
+    };
+
+    sequence<WlanInterface*> WlanInterfaceSeq;
 
     interface ApiHandle
     {
+        WlanInterfaceSeq getWlanInterfaces();
         void disconnectAll();
         void terminateApi();
         JAccessPointSeq ListAPsDetail();
