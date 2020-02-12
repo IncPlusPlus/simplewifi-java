@@ -73,7 +73,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="../../proto/helloworld.proto" Link="helloworld.proto" />
+    <Protobuf Include="../../proto/wifi.proto" Link="wifi.proto" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimpleWifi\SimpleWifi\SimpleWifi.csproj">

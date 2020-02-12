@@ -8,14 +8,14 @@ using System.Reflection;
 using WlanInterface = SimpleWifi.Win32.WlanInterface;
 using System.Threading.Tasks;
 using Grpc.Core;
-using Helloworld;
+using Wifistuff;
 
 namespace JavaInterop
 {
-    class GreeterImpl : Greeter.GreeterBase
+    class WiFiApiImpl : WiFiApi.WiFiApiBase
     {
         // Server side handler of the SayHello RPC
-        public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
+        public override Task<HelloReply> Testing(HelloRequest request, ServerCallContext context)
         {
             return Task.FromResult(new HelloReply { Message = "Hello " + request.Name });
         }
@@ -28,7 +28,7 @@ namespace JavaInterop
         {
             Server server = new Server
             {
-                Services = { Greeter.BindService(new GreeterImpl()) },
+                Services = { WiFiApi.BindService(new WiFiApiImpl()) },
                 Ports = { new ServerPort("localhost", Port, ServerCredentials.Insecure) }
             };
             server.Start();

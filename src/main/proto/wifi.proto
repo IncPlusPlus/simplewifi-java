@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.github.incplusplus.simplewifijava.generated";
+option java_outer_classname = "WiFiProto";
+
+package wifistuff;
+
+// The greeting service definition.
+service WiFiApi {
+    // Sends a greeting
+    rpc Testing (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
