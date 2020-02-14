@@ -9,17 +9,63 @@ using WlanInterface = SimpleWifi.Win32.WlanInterface;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Wifistuff;
+using Google.Protobuf.WellKnownTypes;
 
 namespace JavaInterop
 {
     class WiFiApiImpl : WiFiApi.WiFiApiBase
     {
-        // Server side handler of the SayHello RPC
-        public override Task<HelloReply> Testing(HelloRequest request, ServerCallContext context)
+        private Wifi wifi = new Wifi();
+        public override Task<WlanInterfaceSeq> GetWlanInterfaces(Empty request, ServerCallContext context)
         {
-            return Task.FromResult(new HelloReply { Message = "Hello " + request.Name });
+            var interfaces = wifi.Interfaces();
+            WlanInterfaceSeq sequence = new WlanInterfaceSeq();
+            Wifistuff.WlanInterface[] wlanInterfaces = new Wifistuff.WlanInterface[interfaces.Count()];
+            // WlanInterfacePrxHelper.uncheckedCast(new WlanInterfaceImpl(null))
+            for (int i = 0; i < wlanInterfaces.Length; i++)
+            {
+                wlanInterfaces[i] = translate(interfaces.ElementAt(i));
+            }
+            sequence.Interfaces.AddRange(wlanInterfaces);
+            return Task.FromResult(sequence);
+        }
+
+        public override Task<JAccessPointSeq> ListAll(Empty request, ServerCallContext context)
+        {
+            IEnumerable<JAccessPoint> accessPoints = wifi.GetAccessPoints().OrderByDescending(ap => ap.SignalStrength).Select(ap => translate(ap));
+            JAccessPointSeq seq = new JAccessPointSeq();
+            seq.AccessPoints.AddRange(accessPoints);
+            return Task.FromResult(seq);
+        }
+
+        public override Task<GenericMessage> ConnectWithAuth(ConnectionRequest request, ServerCallContext context)
+        {
+            SimpleWifi.AccessPoint accessPoint = wifi.GetAccessPoints().Where(ap => ap.Name.Equals(request.AccessPoint.Name)).First();
+            SimpleWifi.AuthRequest auth = new SimpleWifi.AuthRequest(wifi.GetAccessPoints().Where(ap => ap.Name.Equals(request.AccessPoint.Name)).First());
+        }
+
+        internal Wifistuff.WlanInterface translate(WlanInterface wlanInterface)
+        {
+            return new Wifistuff.WlanInterface();
+        }
+
+        internal Wifistuff.JAccessPoint translate(AccessPoint thisAP)
+        {
+            Wifistuff.JAccessPoint customAp = new Wifistuff.JAccessPoint();
+            WlanInterface wlanInterface = thisAP.GetFieldValue<WlanInterface>("_interface");
+            WlanAvailableNetwork network = thisAP.GetFieldValue<WlanAvailableNetwork>("_network");
+            customAp.InterfaceName = wlanInterface.InterfaceName;
+            customAp.Name = thisAP.Name;
+            customAp.SignalStrength = (int)thisAP.SignalStrength;
+            customAp.AuthAlgorithm = System.Enum.GetName(typeof(Dot11AuthAlgorithm), network.dot11DefaultAuthAlgorithm);
+            customAp.CipherAlgorithm = System.Enum.GetName(typeof(Dot11CipherAlgorithm), network.dot11DefaultCipherAlgorithm);
+            customAp.BssType = System.Enum.GetName(typeof(Dot11BssType), network.dot11BssType);
+            customAp.Connectable = network.networkConnectable;
+            customAp.WlanNotConnectableReason = System.Enum.GetName(typeof(WlanReasonCode), network.wlanNotConnectableReason);
+            return customAp;
         }
     }
+
     class Program
     {
         const int Port = 50051;
@@ -45,139 +91,139 @@ namespace JavaInterop
     //{
     //    private WlanInterface _wlanInterface;
 
-    //    public WlanInterfaceImpl(WlanInterface wlanInterface)
-    //    {
-    //        this._wlanInterface = wlanInterface;
-    //    }
+                //    public WlanInterfaceImpl(WlanInterface wlanInterface)
+                //    {
+                //        this._wlanInterface = wlanInterface;
+                //    }
 
-    //    public override void scan(Current current = null)
-    //    {
-    //        _wlanInterface.Scan();
-    //    }
-    //}
-    
-    //public class WiFiApiI : WiFiApi.ApiHandleDisp_
-    //{
-    //    private Wifi wifi = new Wifi();
-    //    private Communicator communicator;
-    //    private bool? _scanSuccessful = null;
-    //    public string _lastFailReason="";
+                //    public override void scan(Current current = null)
+                //    {
+                //        _wlanInterface.Scan();
+                //    }
+                //}
 
-    //    public WiFiApiI(Communicator communicator)
-    //    {
-    //        this.communicator = communicator;
-    //    }
+                //public class WiFiApiI : WiFiApi.ApiHandleDisp_
+                //{
+                //    private Wifi wifi = new Wifi();
+                //    private Communicator communicator;
+                //    private bool? _scanSuccessful = null;
+                //    public string _lastFailReason="";
 
-    //    public override WlanInterfacePrx[] getWlanInterfaces(Current current = null)
-    //    {
-    //        var interfaces = wifi.Interfaces();
-    //        WlanInterfacePrx[] wlanInterfaces = new WlanInterfacePrx[interfaces.Count()];
-    //        // WlanInterfacePrxHelper.uncheckedCast(new WlanInterfaceImpl(null))
-    //        for (int i = 0; i < wlanInterfaces.Length; i++)
-    //        {
-    //            wlanInterfaces[i] =
-    //                WlanInterfacePrxHelper.checkedCast(
-    //                    current.adapter.addWithUUID(new WlanInterfaceImpl(interfaces.ElementAt(i))));
-    //        }
-    //        return wlanInterfaces;
-    //    }
+                //    public WiFiApiI(Communicator communicator)
+                //    {
+                //        this.communicator = communicator;
+                //    }
 
-    //    // public void scanAll(Current current = null)
-    //    // {
-    //    //     _scanSuccessful = null;
-    //    //     foreach (WlanInterface wlanInterface in wifi.Interfaces())
-    //    //     {
-    //    //         try
-    //    //         {
-    //    //             wlanInterface.WlanNotification += WlanNotificationChanged;
-    //    //             wlanInterface.Scan();
-    //    //             while (_scanSuccessful == null)
-    //    //             {
-    //    //             }
-    //    //
-    //    //             wlanInterface.WlanNotification -= WlanNotificationChanged;
-    //    //             if (_scanSuccessful == false)
-    //    //             {
-    //    //                 return new MessageBool(false,_lastFailReason);
-    //    //             }
-    //    //         }
-    //    //         catch (Exception e)
-    //    //         {
-    //    //             _lastFailReason = e.Message;
-    //    //             return new MessageBool(false,_lastFailReason);
-    //    //         }
-    //    //     }
-    //    //     return new MessageBool(true,_lastFailReason);
-    //    // }
+                //    public override WlanInterfacePrx[] getWlanInterfaces(Current current = null)
+                //    {
+                //        var interfaces = wifi.Interfaces();
+                //        WlanInterfacePrx[] wlanInterfaces = new WlanInterfacePrx[interfaces.Count()];
+                //        // WlanInterfacePrxHelper.uncheckedCast(new WlanInterfaceImpl(null))
+                //        for (int i = 0; i < wlanInterfaces.Length; i++)
+                //        {
+                //            wlanInterfaces[i] =
+                //                WlanInterfacePrxHelper.checkedCast(
+                //                    current.adapter.addWithUUID(new WlanInterfaceImpl(interfaces.ElementAt(i))));
+                //        }
+                //        return wlanInterfaces;
+                //    }
 
-    //    public override void disconnectAll(Current current = null)
-    //    {
-    //        wifi.Disconnect();
-    //    }
+                //    // public void scanAll(Current current = null)
+                //    // {
+                //    //     _scanSuccessful = null;
+                //    //     foreach (WlanInterface wlanInterface in wifi.Interfaces())
+                //    //     {
+                //    //         try
+                //    //         {
+                //    //             wlanInterface.WlanNotification += WlanNotificationChanged;
+                //    //             wlanInterface.Scan();
+                //    //             while (_scanSuccessful == null)
+                //    //             {
+                //    //             }
+                //    //
+                //    //             wlanInterface.WlanNotification -= WlanNotificationChanged;
+                //    //             if (_scanSuccessful == false)
+                //    //             {
+                //    //                 return new MessageBool(false,_lastFailReason);
+                //    //             }
+                //    //         }
+                //    //         catch (Exception e)
+                //    //         {
+                //    //             _lastFailReason = e.Message;
+                //    //             return new MessageBool(false,_lastFailReason);
+                //    //         }
+                //    //     }
+                //    //     return new MessageBool(true,_lastFailReason);
+                //    // }
 
-    //    public override JAccessPointPrx[] ListAPsDetail(Current current = null)
-    //    {
-    //        var accessPoints = List();
-    //        WiFiApi.JAccessPointPrx[] APList = new WiFiApi.JAccessPointPrx[accessPoints.Count()];
+                //    public override void disconnectAll(Current current = null)
+                //    {
+                //        wifi.Disconnect();
+                //    }
 
-    //        for (int i = 0; i < APList.Length; i++)
-    //        {
-    //            APList[i] = JAccessPointPrxHelper.checkedCast(
-    //                current.adapter.addWithUUID(new JavaInterop.WiFiApiI.JAccessPoint(accessPoints.ElementAt(i))));
-    //        }
-    //        return APList;
-    //    }
-        
-    //    private void WlanNotificationChanged(WlanNotificationData e)
-    //    {
-    //        if (e.NotificationCode.Equals(WlanNotificationCodeAcm.ScanComplete))
-    //        {
-    //            _scanSuccessful = true;
-    //        }
-    //        else if(e.NotificationCode.Equals(WlanNotificationCodeAcm.ScanFail))
-    //        {
-    //            _lastFailReason = e.NotificationCode.ToString();
-    //            _scanSuccessful = false;
-    //        }
-    //    }
+                //    public override JAccessPointPrx[] ListAPsDetail(Current current = null)
+                //    {
+                //        var accessPoints = List();
+                //        WiFiApi.JAccessPointPrx[] APList = new WiFiApi.JAccessPointPrx[accessPoints.Count()];
 
-    //    public override void terminateApi(Current current = null)
-    //    {
-    //        communicator.shutdown();
-    //        //Environment.Exit(0);
-    //    }
+                //        for (int i = 0; i < APList.Length; i++)
+                //        {
+                //            APList[i] = JAccessPointPrxHelper.checkedCast(
+                //                current.adapter.addWithUUID(new JavaInterop.WiFiApiI.JAccessPoint(accessPoints.ElementAt(i))));
+                //        }
+                //        return APList;
+                //    }
 
-    //    private IEnumerable<AccessPoint> List()
-    //    {
-    //        IEnumerable<AccessPoint> accessPoints = wifi.GetAccessPoints().OrderByDescending(ap => ap.SignalStrength);
-    //        return accessPoints;
-    //    }
+                //    private void WlanNotificationChanged(WlanNotificationData e)
+                //    {
+                //        if (e.NotificationCode.Equals(WlanNotificationCodeAcm.ScanComplete))
+                //        {
+                //            _scanSuccessful = true;
+                //        }
+                //        else if(e.NotificationCode.Equals(WlanNotificationCodeAcm.ScanFail))
+                //        {
+                //            _lastFailReason = e.NotificationCode.ToString();
+                //            _scanSuccessful = false;
+                //        }
+                //    }
 
-    //    public class JAccessPoint : WiFiApi.JAccessPointDisp_
-    //    {
-    //        private AccessPoint thisAP;
-    //        private string interfaceName;
-    //        private string name;
-    //        private int signalStrength;
-    //        private string authAlgorithm;
-    //        private string cipherAlgorithm;
-    //        private string bssType;
-    //        private bool connectable;
-    //        private string wlanNotConnectableReason;
+                //    public override void terminateApi(Current current = null)
+                //    {
+                //        communicator.shutdown();
+                //        //Environment.Exit(0);
+                //    }
 
-    //        internal JAccessPoint(AccessPoint thisAP)
-    //        {
-    //            this.thisAP = thisAP;
-    //            WlanInterface wlanInterface = thisAP.GetFieldValue<WlanInterface>("_interface");
-    //            WlanAvailableNetwork network = thisAP.GetFieldValue<WlanAvailableNetwork>("_network");
-    //            this.interfaceName = wlanInterface.InterfaceName;
-    //            this.name = thisAP.Name;
-    //            this.signalStrength = (int) thisAP.SignalStrength;
-    //            this.authAlgorithm = Enum.GetName(typeof(Dot11AuthAlgorithm), network.dot11DefaultAuthAlgorithm);
-    //            this.cipherAlgorithm = Enum.GetName(typeof(Dot11CipherAlgorithm), network.dot11DefaultCipherAlgorithm);
-    //            this.bssType = Enum.GetName(typeof(Dot11BssType), network.dot11BssType);
-    //            this.connectable = network.networkConnectable;
-    //            this.wlanNotConnectableReason = Enum.GetName(typeof(WlanReasonCode), network.wlanNotConnectableReason);
+                //    private IEnumerable<AccessPoint> List()
+                //    {
+                //        IEnumerable<AccessPoint> accessPoints = wifi.GetAccessPoints().OrderByDescending(ap => ap.SignalStrength);
+                //        return accessPoints;
+                //    }
+
+                //    public class JAccessPoint : WiFiApi.JAccessPointDisp_
+                //    {
+                //        private AccessPoint thisAP;
+                //        private string interfaceName;
+                //        private string name;
+                //        private int signalStrength;
+                //        private string authAlgorithm;
+                //        private string cipherAlgorithm;
+                //        private string bssType;
+                //        private bool connectable;
+                //        private string wlanNotConnectableReason;
+
+                //        internal JAccessPoint(AccessPoint thisAP)
+                //        {
+                //this.thisAP = thisAP;
+                //WlanInterface wlanInterface = thisAP.GetFieldValue<WlanInterface>("_interface");
+                //WlanAvailableNetwork network = thisAP.GetFieldValue<WlanAvailableNetwork>("_network");
+                //this.interfaceName = wlanInterface.InterfaceName;
+                //this.name = thisAP.Name;
+                //this.signalStrength = (int)thisAP.SignalStrength;
+                //this.authAlgorithm = Enum.GetName(typeof(Dot11AuthAlgorithm), network.dot11DefaultAuthAlgorithm);
+                //this.cipherAlgorithm = Enum.GetName(typeof(Dot11CipherAlgorithm), network.dot11DefaultCipherAlgorithm);
+                //this.bssType = Enum.GetName(typeof(Dot11BssType), network.dot11BssType);
+                //this.connectable = network.networkConnectable;
+                //this.wlanNotConnectableReason = Enum.GetName(typeof(WlanReasonCode), network.wlanNotConnectableReason);
     //        }
 
     //        public override bool connect(Current current = null)
