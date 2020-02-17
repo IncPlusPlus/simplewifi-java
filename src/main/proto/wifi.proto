@@ -6,9 +6,7 @@ option java_outer_classname = "WiFiProto";
 import "google/protobuf/empty.proto";
 package wifistuff;
 
-// The greeting service definition.
 service WiFiApi {
-    // Sends a greeting
     rpc GetWlanInterfaces (google.protobuf.Empty) returns (WlanInterfaceSeq) {}
     rpc ListAll (google.protobuf.Empty) returns (JAccessPointSeq) {}
     rpc ConnectWithAuth (ConnectionRequest) returns (GenericMessage) {}
