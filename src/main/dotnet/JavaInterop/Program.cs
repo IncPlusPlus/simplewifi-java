@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using SimpleWifi;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +52,7 @@ namespace JavaInterop
 
         public override Task<GenericMessage> EnsureApiAlive(Empty request, ServerCallContext context)
         {
-            return base.EnsureApiAlive(request, context);
+            return Task.FromResult(new GenericMessage());
         }
 
         internal Wifistuff.WlanInterface translate(WlanInterface wlanInterface)
