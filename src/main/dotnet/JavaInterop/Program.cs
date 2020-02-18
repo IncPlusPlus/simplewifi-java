@@ -97,8 +97,8 @@ namespace JavaInterop
             server.Start();
 
             Console.WriteLine("gRPC server listening on port " + Port);
-            Console.WriteLine("Press any key to stop the server...");
-            Console.ReadKey();
+            Console.WriteLine("Enter a newline to stop the server...");
+            Console.ReadLine();
 
             server.ShutdownAsync().Wait();
         }
