@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using SimpleWifi;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,12 +48,6 @@ namespace JavaInterop
             auth.Username = request.AuthRequest.Username;
             result.Result = accessPoint.Connect(auth);
             return Task.FromResult(result);
-        }
-
-        public override Task<GenericMessage> TerminateApi(Empty request, ServerCallContext context)
-        {
-            Environment.Exit(0);
-            return null;
         }
 
         public override Task<GenericMessage> EnsureApiAlive(Empty request, ServerCallContext context)

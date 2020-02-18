@@ -10,7 +10,6 @@ service WiFiApi {
     rpc GetWlanInterfaces (google.protobuf.Empty) returns (WlanInterfaceSeq) {}
     rpc ListAll (google.protobuf.Empty) returns (JAccessPointSeq) {}
     rpc ConnectWithAuth (ConnectionRequest) returns (GenericMessage) {}
-    rpc TerminateApi (google.protobuf.Empty) returns (GenericMessage) {}
     rpc EnsureApiAlive (google.protobuf.Empty) returns (GenericMessage) {}
 }
 
