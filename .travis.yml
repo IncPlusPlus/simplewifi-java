@@ -11,14 +11,10 @@ addons:
       - sourceline: deb https://download.mono-project.com/repo/ubuntu stable-xenial
           main
         key_url: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA6A19B38D3D831EF
-      - sourceline: deb http://zeroc.com/download/ice/3.7/ubuntu16.04 stable main
-          main
-        key_url: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xB6391CB2CFBA643D
     packages:
       - mono-devel
       - msbuild
 #      - libmono-system-runtime-interopservices-runtimeinformation4.0-cil
-      - zeroc-ice-compilers
 matrix:
   include:
   - jdk: oraclejdk11
