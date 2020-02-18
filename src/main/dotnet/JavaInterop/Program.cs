@@ -40,8 +40,25 @@ namespace JavaInterop
 
         public override Task<GenericMessage> ConnectWithAuth(ConnectionRequest request, ServerCallContext context)
         {
+            GenericMessage result = new GenericMessage();
             SimpleWifi.AccessPoint accessPoint = wifi.GetAccessPoints().Where(ap => ap.Name.Equals(request.AccessPoint.Name)).First();
-            SimpleWifi.AuthRequest auth = new SimpleWifi.AuthRequest(wifi.GetAccessPoints().Where(ap => ap.Name.Equals(request.AccessPoint.Name)).First());
+            SimpleWifi.AuthRequest auth = new SimpleWifi.AuthRequest(accessPoint);
+            auth.Password = request.AuthRequest.Password;
+            auth.Domain = request.AuthRequest.Domain;
+            auth.Username = request.AuthRequest.Username;
+            result.Result = accessPoint.Connect(auth);
+            return Task.FromResult(result);
+        }
+
+        public override Task<GenericMessage> TerminateApi(Empty request, ServerCallContext context)
+        {
+            Environment.Exit(0);
+            return null;
+        }
+
+        public override Task<GenericMessage> EnsureApiAlive(Empty request, ServerCallContext context)
+        {
+            return base.EnsureApiAlive(request, context);
         }
 
         internal Wifistuff.WlanInterface translate(WlanInterface wlanInterface)
@@ -79,7 +96,7 @@ namespace JavaInterop
             };
             server.Start();
 
-            Console.WriteLine("Greeter server listening on port " + Port);
+            Console.WriteLine("gRPC server listening on port " + Port);
             Console.WriteLine("Press any key to stop the server...");
             Console.ReadKey();
 
