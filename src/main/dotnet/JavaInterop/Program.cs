@@ -65,6 +65,7 @@ namespace JavaInterop
             Wifistuff.JAccessPoint customAp = new Wifistuff.JAccessPoint();
             WlanInterface wlanInterface = thisAP.GetFieldValue<WlanInterface>("_interface");
             WlanAvailableNetwork network = thisAP.GetFieldValue<WlanAvailableNetwork>("_network");
+            //TODO: Figure out why this line is so damn costly
             customAp.InterfaceName = wlanInterface.InterfaceName;
             customAp.Name = thisAP.Name;
             customAp.SignalStrength = (int)thisAP.SignalStrength;
