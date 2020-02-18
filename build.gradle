@@ -45,7 +45,7 @@ msbuild {
     // Below values can override settings from the project file
 
     // overrides project OutputPath
-    destinationDir = 'src/main/resources'
+//    destinationDir = 'src/main/resources'
 
     // overrides project IntermediaryOutputPath
 //    intermediateDir = 'build/msbuild/obj'
@@ -72,14 +72,27 @@ task printStartedMsbuild() {
     doFirst{
         println('travis_fold:start:msbuild')
     }
-    //Use this space to move the exe into a usable folder
 }
 
-task printFinishedMsbuild() {
+task printFinishedMsbuild(type: Copy) {
     doFirst{
         println('travis_fold:end:msbuild')
     }
-    //Use this space to move the exe into a usable folder
+    from file("${rootDir}/src/main/dotnet/JavaInterop/bin/Debug/JavaInterop.exe")
+    into file("${rootDir}/src/main/resources")
+}
+
+task ensureExeExists() {
+    doFirst {
+        if (!file("${rootDir}/src/main/resources/JavaInterop.exe").exists()) {
+            logger.log(LogLevel.ERROR, "JavaInterop.exe not found. " +
+                    "It is crucial to the usefulness of this library that it is included in the resources folder.")
+            throw new GradleException("JavaInterop.exe not found. Please see log.") as Throwable
+        }
+        else {
+            logger.quiet("JavaInterop.exe exists where it should. Continuing build.")
+        }
+    }
 }
 
 clean.doFirst {
@@ -93,8 +106,9 @@ clean.doFirst {
 printStartedMsbuild.dependsOn(project.tasks.nugetRestore)
 printFinishedMsbuild.dependsOn(project.tasks.msbuild)
 project.tasks.msbuild.dependsOn(printStartedMsbuild)
+ensureExeExists.dependsOn(project.tasks.printFinishedMsbuild)
 
-build.finalizedBy(printFinishedMsbuild)
+build.finalizedBy(ensureExeExists)
 
 //assemblyInfoPatcher {
 //    // mandatory if you want to patch your AssemblyInfo.cs/fs/vb

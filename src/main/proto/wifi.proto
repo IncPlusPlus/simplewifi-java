@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.github.incplusplus.simplewifijava.generated";
+option java_outer_classname = "WiFiProto";
+import "google/protobuf/empty.proto";
+package wifistuff;
+
+service WiFiApi {
+    rpc GetWlanInterfaces (google.protobuf.Empty) returns (WlanInterfaceSeq) {}
+    rpc ListAll (google.protobuf.Empty) returns (JAccessPointSeq) {}
+    rpc ConnectWithAuth (ConnectionRequest) returns (GenericMessage) {}
+    rpc EnsureApiAlive (google.protobuf.Empty) returns (GenericMessage) {}
+}
+
+service WlanInterfaceApi {
+    rpc Scan (WlanInterface) returns (google.protobuf.Empty) {}
+}
+
+message ConnectionRequest {
+    JAccessPoint AccessPoint =1;
+    AuthRequest AuthRequest=2;
+}
+
+message AuthRequest {
+    string password=1;
+    string username=2;
+    string domain=3;
+}
+
+message WlanInterfaceSeq {
+    repeated WlanInterface interfaces = 1;
+}
+
+message WlanInterface {
+
+}
+
+message JAccessPointSeq {
+    repeated JAccessPoint accessPoints = 1;
+}
+
+message JAccessPoint {
+    string Name=1;
+    sint32 SignalStrength=2;
+    string InterfaceName=3;
+    bool Connectable = 4;
+    string WlanNotConnectableReason = 5;
+    string AuthAlgorithm = 6;
+    string CipherAlgorithm = 7;
+    string BssType = 8;
+    string ProfileXML = 9;
+}
+
+// The request message containing the user's name.
+message GenericMessage {
+    bool result =1;
+    string message = 2;
+}
