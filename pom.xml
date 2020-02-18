@@ -6,7 +6,7 @@
 
     <groupId>io.github.incplusplus</groupId>
     <artifactId>simplewifi-java</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
     <name>SimpleWifi: Java Edition</name>
     <description>A Java-wrapped version of SimpleWifi</description>
