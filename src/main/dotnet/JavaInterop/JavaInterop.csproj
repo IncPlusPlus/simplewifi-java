@@ -47,37 +47,40 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="generated\*" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Costura.Fody">
-      <Version>3.3.3</Version>
+      <Version>4.1.0</Version>
     </PackageReference>
     <PackageReference Include="Fody">
-      <Version>4.2.1</Version>
+      <Version>6.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="Google.Protobuf">
+      <Version>3.11.3</Version>
+    </PackageReference>
+    <PackageReference Include="Grpc">
+      <Version>2.27.0</Version>
+    </PackageReference>
+    <PackageReference Include="Grpc.Tools">
+      <Version>2.27.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="zeroc.ice.net">
-      <Version>3.7.3</Version>
-    </PackageReference>
-    <PackageReference Include="zeroc.icebuilder.msbuild">
-      <Version>5.0.4</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\resources\WiFiApi.ice">
-      <Link>WiFiApi.ice</Link>
-    </Content>
+    <Protobuf Include="../../proto/wifi.proto" Link="wifi.proto" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimpleWifi\SimpleWifi\SimpleWifi.csproj">
       <Project>{6aa425c9-ea6a-4b01-aaed-5ff122e8b663}</Project>
       <Name>SimpleWifi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="generated\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
