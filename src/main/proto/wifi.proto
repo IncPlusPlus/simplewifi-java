@@ -7,13 +7,13 @@ import "google/protobuf/empty.proto";
 package wifistuff;
 
 service WiFiApi {
-    rpc GetWlanInterfaces (google.protobuf.Empty) returns (WlanInterfaceSeq) {}
     rpc ListAll (google.protobuf.Empty) returns (JAccessPointSeq) {}
     rpc ConnectWithAuth (ConnectionRequest) returns (GenericMessage) {}
     rpc EnsureApiAlive (google.protobuf.Empty) returns (GenericMessage) {}
 }
 
 service WlanInterfaceApi {
+    rpc GetWlanInterfaces (google.protobuf.Empty) returns (WlanInterfaceSeq) {}
     rpc Scan (WlanInterface) returns (google.protobuf.Empty) {}
 }
 
@@ -33,7 +33,19 @@ message WlanInterfaceSeq {
 }
 
 message WlanInterface {
-
+    string InterfaceGuid=1;
+    string InterfaceDescription=2;
+    enum WlanInterfaceState {
+        NotReady=0;
+        Connected=1;
+        AdHocNetworkFormed=2;
+        Disconnecting=3;
+        Disconnected=4;
+        Associating=5;
+        Discovering=6;
+        Authenticating=7;
+    }
+    WlanInterfaceState State=3;
 }
 
 message JAccessPointSeq {
