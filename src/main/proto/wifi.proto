@@ -14,6 +14,7 @@ service WiFiApi {
 
 service WlanInterfaceApi {
     rpc GetWlanInterfaces (google.protobuf.Empty) returns (WlanInterfaceSeq) {}
+    rpc GetAccessPoints (WlanInterface) returns (JAccessPointSeq) {}
     rpc Scan (WlanInterface) returns (GenericMessage) {}
 }
 
