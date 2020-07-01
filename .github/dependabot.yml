@@ -1,0 +1,42 @@
+version: 2
+updates:
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  target-branch: develop
+  reviewers:
+  - IncPlusPlus
+  assignees:
+  - IncPlusPlus
+- package-ecosystem: gitsubmodule
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  target-branch: develop
+  reviewers:
+  - IncPlusPlus
+  assignees:
+  - IncPlusPlus
+- package-ecosystem: nuget
+  directory: "/src/main/dotnet"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  target-branch: develop
+  reviewers:
+  - IncPlusPlus
+  assignees:
+  - IncPlusPlus
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  target-branch: develop
+  reviewers:
+  - IncPlusPlus
+  assignees:
+  - IncPlusPlus
