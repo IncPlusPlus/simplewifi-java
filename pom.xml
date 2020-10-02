@@ -282,7 +282,7 @@
                                 </goals>
                                 <phase>clean</phase>
                                 <configuration>
-                                    <gradleVersion>5.3.1</gradleVersion>
+                                    <gradleVersion>6.5</gradleVersion>
                                     <tasks>
                                         <task>clean</task>
                                     </tasks>
@@ -295,7 +295,7 @@
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <gradleVersion>5.3.1</gradleVersion>
+                                    <gradleVersion>6.5</gradleVersion>
                                     <tasks>
                                         <task>clean</task>
                                         <task>build</task>
