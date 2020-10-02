@@ -1,25 +1,16 @@
-dist: xenial
+os: windows
 language: java
 cache:
   directories:
     - "$HOME/.m2/repository"
 env:
   - CLI_VERSION=latest
-addons:
-  apt:
-    sources:
-      - sourceline: deb https://download.mono-project.com/repo/ubuntu stable-xenial
-          main
-        key_url: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA6A19B38D3D831EF
-    packages:
-      - mono-complete
-      - msbuild
-#      - libmono-system-runtime-interopservices-runtimeinformation4.0-cil
 matrix:
   include:
   - jdk: oraclejdk11
     # See https://github.com/travis-ci/travis-ci/issues/8667
-    install: true
+    install:
+      - choco install maven visualstudio2019buildtools
     script:
     - mvn clean install
     - cd buildhelper
