@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class MainTest {
 	@Test
@@ -29,10 +30,18 @@ public class MainTest {
 	
 	@Test
 	public void testGrpcFunctional() throws IOException, URISyntaxException {
-		ExeHelper helper = new ExeHelper();
-		//I get that this runs twice because of the constructor. Leave me alone
-		helper.wifiApi.ensureApiAlive(Empty.getDefaultInstance());
-		helper.conclude();
+		try {
+			ExeHelper helper = new ExeHelper();
+			//I get that this runs twice because of the constructor. Leave me alone
+			helper.wifiApi.ensureApiAlive(Empty.getDefaultInstance());
+			helper.conclude();
+			assertTrue(true);
+		}
+		catch (IOException e) {
+			System.out.println(e);
+			e.printStackTrace();
+			fail();
+		}
 	}
 }
 
