@@ -25,6 +25,7 @@ script:
 - mvn verify
 - cd ..
 after_script:
+  - gradlew.bat --stop
   - ps -W | sort
 deploy:
   - provider: bintray
