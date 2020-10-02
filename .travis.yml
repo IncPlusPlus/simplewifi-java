@@ -26,6 +26,7 @@ script:
 - cd ..
 after_script:
   - exit
+  - ps -W | sort
 deploy:
   - provider: bintray
     file: bintray_info_maven.JSON
