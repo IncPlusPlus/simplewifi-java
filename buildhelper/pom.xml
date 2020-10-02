@@ -40,19 +40,16 @@
             <groupId>io.github.incplusplus</groupId>
             <artifactId>simplewifi-java</artifactId>
             <version>${simplewifi-java.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.github.incplusplus</groupId>
             <artifactId>bigtoolbox-io</artifactId>
             <version>1.0.103</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.9</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

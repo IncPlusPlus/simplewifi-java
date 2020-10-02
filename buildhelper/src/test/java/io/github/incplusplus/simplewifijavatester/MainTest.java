@@ -1,3 +1,5 @@
+package io.github.incplusplus.simplewifijavatester;
+
 import com.google.protobuf.Empty;
 import io.github.incplusplus.bigtoolbox.io.filesys.TempFile;
 import io.github.incplusplus.simplewifijava.SimpleWifiJavaEntryPoint;
