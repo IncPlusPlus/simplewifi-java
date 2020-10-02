@@ -5,17 +5,14 @@ cache:
 env:
   - CLI_VERSION=latest
   - JAVA_HOME=C:\Program Files\BellSoft\LibericaJDK-15
-matrix:
-  include:
-  - jdk: oraclejdk11
-    # See https://github.com/travis-ci/travis-ci/issues/8667
-    install:
-      - choco install libericajdk maven visualstudio2019buildtools
-    script:
-    - mvn clean install
-    - cd buildhelper
-    - mvn verify
-    - cd ..
+
+install:
+  - choco install libericajdk maven visualstudio2019buildtools
+script:
+- mvn clean install
+- cd buildhelper
+- mvn verify
+- cd ..
 deploy:
   - provider: bintray
     file: bintray_info_maven.JSON
