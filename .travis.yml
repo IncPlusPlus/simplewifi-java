@@ -8,6 +8,7 @@ env:
 
 install:
   - choco install libericajdk maven visualstudio2019buildtools
+  - refreshenv
 script:
 - mvn clean install
 - cd buildhelper
