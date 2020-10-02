@@ -24,6 +24,7 @@ script:
 - mvn verify
 - cd ..
 after_script:
+  - ./gradlew --stop
   - exit
   - ps -W | sort
 deploy:
