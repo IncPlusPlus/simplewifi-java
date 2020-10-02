@@ -10,7 +10,7 @@ buildscript {
 
     dependencies {
         classpath 'com.ullink.gradle:gradle-nuget-plugin:2.18'
-        classpath 'com.ullink.gradle:gradle-msbuild-plugin:3.6'
+        classpath 'com.ullink.gradle:gradle-msbuild-plugin:3.9'
     }
 }
 apply plugin: 'nuget'
