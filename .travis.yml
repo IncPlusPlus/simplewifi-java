@@ -1,4 +1,5 @@
 os: windows
+language: bash
 cache:
   directories:
     - "$HOME/.m2/repository"
