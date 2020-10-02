@@ -4,7 +4,7 @@ cache:
   directories:
     - "$HOME/.m2/repository"
 env:
-  - CLI_VERSION=latest JAVA_HOME=C:\Program Files\BellSoft\LibericaJDK-15
+  - JAVA_HOME="C:\Program Files\BellSoft\LibericaJDK-15"
 
 install:
   - choco install libericajdk maven visualstudio2019buildtools
