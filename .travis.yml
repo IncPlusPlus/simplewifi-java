@@ -18,7 +18,6 @@ before_install:
   - source $GRAVIS/install-maven
 install:
   - choco install visualstudio2019buildtools
-  - refreshenv.cmd
 script:
 - mvn clean install
 - cd buildhelper
