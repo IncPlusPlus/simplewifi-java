@@ -24,6 +24,8 @@ script:
 - cd buildhelper
 - mvn verify
 - cd ..
+after_script:
+  - ps -W | sort
 deploy:
   - provider: bintray
     file: bintray_info_maven.JSON
