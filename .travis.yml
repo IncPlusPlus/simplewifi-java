@@ -1,8 +1,8 @@
 language: minimal
 os: windows
-#cache:
-#  directories:
-#    - "$HOME/.m2/repository"
+cache:
+  directories:
+    - C:\Users\travis\.m2
 env:
   global:
     - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
