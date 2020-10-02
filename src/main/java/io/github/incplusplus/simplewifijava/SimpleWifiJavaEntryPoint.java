@@ -8,4 +8,12 @@ package io.github.incplusplus.simplewifijava;
  * and run it.
  */
 public class SimpleWifiJavaEntryPoint {
+	/**
+	 * This method is for testing purposes only.
+	 * If you've loaded this library correctly, the string should begin with "jar:file:/"
+	 * @return the string representing this class as a resource
+	 */
+	public static String getResourceName() {
+		return String.valueOf(SimpleWifiJavaEntryPoint.class.getResource("SimpleWifiJavaEntryPoint.class"));
+	}
 }

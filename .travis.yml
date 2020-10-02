@@ -22,6 +22,9 @@ matrix:
     install: true
     script:
     - mvn clean install
+    - cd buildhelper
+    - mvn verify
+    - cd ..
 deploy:
   - provider: bintray
     file: bintray_info_maven.JSON
