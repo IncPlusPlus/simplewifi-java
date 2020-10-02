@@ -56,7 +56,7 @@ class ExeHelper {
 		}
 		
 		dotNetApp = SystemUtils.IS_OS_WINDOWS ? Runtime.getRuntime().exec(
-				interopExe.getAsFile().getPath()) : Runtime.getRuntime().exec("sh -C mono interopExe.getAsFile().getPath()");
+				interopExe.getAsFile().getPath()) : Runtime.getRuntime().exec("sh -c mono interopExe.getAsFile().getPath()");
 		this.channel =
 				ManagedChannelBuilder.forAddress("localhost", 50051)
 						// Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
