@@ -1,15 +1,24 @@
+language: minimal
 os: windows
-language: bash
-cache:
-  directories:
-    - "$HOME/.m2/repository"
+#cache:
+#  directories:
+#    - "$HOME/.m2/repository"
 env:
-  - JAVA_HOME="C:\Program Files\BellSoft\LibericaJDK-15"
-
+  global:
+    - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
+    - GRAVIS="$HOME/gravis"
+    - JDK="liberica@1.14.0-1"
+before_install:
+  # Check out the script set
+  - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
+  # Never use travis_retry: hides failures. travis_retry is used internally where possible.
+  # Java is required, either use "language: java" or, better, rely on Gravis
+  - source $GRAVIS/install-jdk
+  # Install the MAVEN_VERSION of your like
+  - source $GRAVIS/install-maven
 install:
-  - choco install libericajdk maven visualstudio2019buildtools
+  - choco install visualstudio2019buildtools
   - refreshenv.cmd
-  - where mvn
 script:
 - mvn clean install
 - cd buildhelper
