@@ -19,7 +19,6 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <grpc.version>1.26.0</grpc.version>
         <protobuf.version>3.11.0</protobuf.version>
-        <protoc.version>3.11.0</protoc.version>
         <simplewifi-java.version>0.0.4</simplewifi-java.version>
     </properties>
 
@@ -40,19 +39,16 @@
             <groupId>io.github.incplusplus</groupId>
             <artifactId>simplewifi-java</artifactId>
             <version>${simplewifi-java.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.github.incplusplus</groupId>
             <artifactId>bigtoolbox-io</artifactId>
             <version>1.0.103</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.9</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -88,27 +84,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.xolstice.maven.plugins</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>0.6.1</version>
-                <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}</protocArtifact>
-                    <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>compile-custom</goal>
-                        </goals>
-                        <configuration>
-                            <!--                            <attachProtoSources>false</attachProtoSources>-->
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
