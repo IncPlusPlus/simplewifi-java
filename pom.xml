@@ -20,8 +20,8 @@
         <bintray.repo>incplusplus/main-maven</bintray.repo>
         <bintray.package>simplewifi-java</bintray.package>
         <bintray.subject>incplusplus</bintray.subject>
-        <grpc.version>1.26.0</grpc.version>
-        <protobuf.version>3.11.0</protobuf.version>
+        <grpc.version>1.32.1</grpc.version>
+        <protobuf.version>3.13.0</protobuf.version>
         <protoc.version>3.11.0</protoc.version>
     </properties>
 
@@ -56,9 +56,11 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.6.1</version>
                 <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}</protocArtifact>
+                    <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
+                    </protocArtifact>
                     <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
+                    </pluginArtifact>
                 </configuration>
                 <executions>
                     <execution>
@@ -67,7 +69,7 @@
                             <goal>compile-custom</goal>
                         </goals>
                         <configuration>
-<!--                            <attachProtoSources>false</attachProtoSources>-->
+                            <!--                            <attachProtoSources>false</attachProtoSources>-->
                         </configuration>
                     </execution>
                 </executions>
@@ -75,7 +77,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>copy-resource-one</id>
@@ -87,7 +89,9 @@
                             <outputDirectory>${project.build.directory}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${settings.localRepository}/io/github/incplusplus/${project.artifactId}/${project.version}</directory>
+                                    <directory>
+                                        ${settings.localRepository}/io/github/incplusplus/${project.artifactId}/${project.version}
+                                    </directory>
                                     <includes>
                                         <include>*.pom</include>
                                     </includes>
@@ -100,7 +104,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.0</version>
                 <!-- workaround for https://bugs.openjdk.java.net/browse/JDK-8212233 -->
                 <!--                <configuration>-->
                 <!--                    <source>8</source>-->
@@ -133,7 +137,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -203,6 +207,49 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <configuration>
+                            <!-- This target replaces the version number of the test helper so that the installed version is used -->
+                            <target>
+                                <!--                https://stackoverflow.com/a/4802098/1687436-->
+                                <taskdef resource="net/sf/antcontrib/antlib.xml"
+                                         classpathref="maven.plugin.classpath"/>
+                                <replaceregexp file="${project.basedir}/buildhelper/pom.xml"
+                                               match="(&lt;simplewifi-java.version&gt;)(\d+\.\d+\.\d+)(&lt;\/simplewifi-java.version&gt;)"
+                                               replace="&lt;simplewifi-java.version&gt;${project.version}&lt;\/simplewifi-java.version&gt;"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <!--        https://stackoverflow.com/a/4802098/1687436-->
+                <dependencies>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-nodeps</artifactId>
+                        <version>1.8.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -224,7 +271,7 @@
                             <dependency>
                                 <groupId>org.gradle</groupId>
                                 <artifactId>gradle-tooling-api</artifactId>
-                                <version>5.0</version>
+                                <version>6.7-rc-1</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -235,7 +282,7 @@
                                 </goals>
                                 <phase>clean</phase>
                                 <configuration>
-                                    <gradleVersion>5.3.1</gradleVersion>
+                                    <gradleVersion>6.5</gradleVersion>
                                     <tasks>
                                         <task>clean</task>
                                     </tasks>
@@ -248,7 +295,7 @@
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <gradleVersion>5.3.1</gradleVersion>
+                                    <gradleVersion>6.5</gradleVersion>
                                     <tasks>
                                         <task>clean</task>
                                         <task>build</task>
@@ -288,12 +335,9 @@
 
     <repositories>
         <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>bintray-incplusplus-main-maven</id>
-            <name>bintray</name>
-            <url>https://dl.bintray.com/incplusplus/main-maven</url>
+            <id>gradle-releases</id>
+            <name>Gradle Releases</name>
+            <url>https://repo.gradle.org/gradle/libs-releases-local/</url>
         </repository>
     </repositories>
 
@@ -334,7 +378,7 @@
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
-            <version>1.2</version>
+            <version>1.3.2</version>
             <scope>provided</scope> <!-- not needed at runtime -->
         </dependency>
         <dependency>
@@ -345,7 +389,7 @@
         <dependency>
             <groupId>io.github.incplusplus</groupId>
             <artifactId>bigtoolbox-io</artifactId>
-            <version>1.0.102</version>
+            <version>1.0.103</version>
         </dependency>
     </dependencies>
 
