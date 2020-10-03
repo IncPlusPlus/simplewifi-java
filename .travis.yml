@@ -23,6 +23,8 @@ script:
 - cd buildhelper
 - mvn verify
 - cd ..
+after_script:
+  - ./gradlew --stop
 deploy:
   - provider: bintray
     file: bintray_info_maven.JSON
