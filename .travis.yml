@@ -1,27 +1,30 @@
-dist: xenial
-language: java
+language: minimal
+os: windows
 cache:
   directories:
-    - "$HOME/.m2/repository"
+    - $HOME/.m2
 env:
-  - CLI_VERSION=latest
-addons:
-  apt:
-    sources:
-      - sourceline: deb https://download.mono-project.com/repo/ubuntu stable-xenial
-          main
-        key_url: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA6A19B38D3D831EF
-    packages:
-      - mono-devel
-      - msbuild
-#      - libmono-system-runtime-interopservices-runtimeinformation4.0-cil
-matrix:
-  include:
-  - jdk: oraclejdk11
-    # See https://github.com/travis-ci/travis-ci/issues/8667
-    install: true
-    script:
-    - mvn clean install
+  global:
+    - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
+    - GRAVIS="$HOME/gravis"
+    - JDK="liberica@1.14.0-1"
+before_install:
+  # Check out the script set
+  - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
+  # Never use travis_retry: hides failures. travis_retry is used internally where possible.
+  # Java is required, either use "language: java" or, better, rely on Gravis
+  - source $GRAVIS/install-jdk
+  # Install the MAVEN_VERSION of your like
+  - source $GRAVIS/install-maven
+install:
+  - choco install visualstudio2019buildtools
+script:
+- mvn clean install
+- cd buildhelper
+- mvn verify
+- cd ..
+after_script:
+  - ./gradlew --stop
 deploy:
   - provider: bintray
     file: bintray_info_maven.JSON
