@@ -2,7 +2,7 @@ language: minimal
 os: windows
 cache:
   directories:
-    - C:\Users\travis\.m2
+    - $HOME/.m2
 env:
   global:
     - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
