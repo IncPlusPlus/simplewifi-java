@@ -25,7 +25,8 @@ script:
 - cd ..
 after_script:
   - ./gradlew --stop
-  - exit
+  - exit 0
+  - exit 0
   - ps -W | sort
 deploy:
   - provider: bintray
