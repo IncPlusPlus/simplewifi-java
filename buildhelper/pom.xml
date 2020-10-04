@@ -20,7 +20,8 @@
         <grpc.version>1.26.0</grpc.version>
         <protobuf.version>3.11.0</protobuf.version>
         <simplewifi-java.version>0.0.4</simplewifi-java.version>
-        <junit-platform.version>5.4.0</junit-platform.version>
+        <!--        https://github.com/junit-team/junit5/issues/1773#issuecomment-462832880        -->
+        <junit-jupiter.version>5.4.0</junit-jupiter.version>
     </properties>
 
     <developers>
@@ -53,20 +54,8 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit-platform.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit-platform.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-commons</artifactId>
-            <version>1.4.0</version>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
