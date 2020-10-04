@@ -16,15 +16,16 @@ env:
     - JDK="liberica@1.14.0-1"
 before_install:
   # Check out the script set
-  - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
-  # Never use travis_retry: hides failures. travis_retry is used internally where possible.
+  - git clone --depth 1 $GRAVIS_REPO $GRAVIS
   # Java is required, either use "language: java" or, better, rely on Gravis
   - source $GRAVIS/install-jdk
   # Install the MAVEN_VERSION of your like
   - source $GRAVIS/install-maven
 install:
-  - choco install visualstudio2019buildtools
+  - choco install visualstudio2019buildtools tree
 script:
+# In case everything goes to hell, uncomment the below line
+#- rm -rf $HOME/.gradle
 - mvn clean install
 - cd buildhelper
 - mvn verify
