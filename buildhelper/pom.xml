@@ -20,7 +20,7 @@
         <grpc.version>1.26.0</grpc.version>
         <protobuf.version>3.11.0</protobuf.version>
         <simplewifi-java.version>0.0.4</simplewifi-java.version>
-        <junit-platform.version>5.4.0</junit-platform.version>
+        <junit-platform.version>5.7.0</junit-platform.version>
     </properties>
 
     <developers>
