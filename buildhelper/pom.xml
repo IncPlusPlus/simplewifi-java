@@ -18,7 +18,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <grpc.version>1.26.0</grpc.version>
-        <protobuf.version>3.13.0</protobuf.version>
+        <protobuf.version>3.15.1</protobuf.version>
         <simplewifi-java.version>0.0.4</simplewifi-java.version>
         <!--        https://github.com/junit-team/junit5/issues/1773#issuecomment-462832880        -->
         <junit-jupiter.version>5.7.0</junit-jupiter.version>
