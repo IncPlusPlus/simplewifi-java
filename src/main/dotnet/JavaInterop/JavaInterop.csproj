@@ -59,7 +59,7 @@
       <Version>6.2.6</Version>
     </PackageReference>
     <PackageReference Include="Google.Protobuf">
-      <Version>3.13.0</Version>
+      <Version>3.17.1</Version>
     </PackageReference>
     <PackageReference Include="Grpc">
       <Version>2.32.0</Version>
