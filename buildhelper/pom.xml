@@ -21,7 +21,7 @@
         <protobuf.version>3.13.0</protobuf.version>
         <simplewifi-java.version>0.0.4</simplewifi-java.version>
         <!--        https://github.com/junit-team/junit5/issues/1773#issuecomment-462832880        -->
-        <junit-jupiter.version>5.7.0</junit-jupiter.version>
+        <junit-jupiter.version>5.8.0</junit-jupiter.version>
     </properties>
 
     <developers>
